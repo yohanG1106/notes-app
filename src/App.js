@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { db } from "./firebase";
 import { collection, addDoc, getDocs, deleteDoc, doc, serverTimestamp } from "firebase/firestore";
 import "./App.css";
@@ -10,14 +10,14 @@ function App() {
 
   const notesCollection = collection(db, "notes");
 
-  const fetchNotes = async () => {
+  const fetchNotes = useCallback(async () => {
     try {
       const data = await getDocs(notesCollection);
       setNotes(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     } catch (error) {
       console.error("Error fetching notes:", error);
     }
-  };
+  }, [notesCollection]);
 
   const addNote = async () => {
     try {
@@ -47,9 +47,8 @@ function App() {
 
   useEffect(() => {
     fetchNotes();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  
+  }, [fetchNotes]);
+
   return (
     <div className="container">
       <h1>📝 My Notes App</h1>
