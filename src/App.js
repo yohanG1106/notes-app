@@ -47,8 +47,9 @@ function App() {
 
   useEffect(() => {
     fetchNotes();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
+  
   return (
     <div className="container">
       <h1>📝 My Notes App</h1>
